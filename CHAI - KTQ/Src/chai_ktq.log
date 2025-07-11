@@ -1,0 +1,47 @@
+2025-07-11 15:00:59,191 - __main__ - INFO - Using device: cpu
+2025-07-11 15:00:59,192 - __main__ - INFO - Starting CHAI-KTQ Flask application
+2025-07-11 15:00:59,192 - __main__ - INFO - Server will be available at http://localhost:5005
+2025-07-11 15:01:04,228 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5005
+ * Running on http://10.0.0.35:5005
+2025-07-11 15:01:04,228 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-11 15:01:04,231 - werkzeug - INFO -  * Restarting with stat
+2025-07-11 15:01:09,079 - __main__ - INFO - Using device: cpu
+2025-07-11 15:01:09,080 - __main__ - INFO - Starting CHAI-KTQ Flask application
+2025-07-11 15:01:09,080 - __main__ - INFO - Server will be available at http://localhost:5005
+2025-07-11 15:01:09,096 - werkzeug - WARNING -  * Debugger is active!
+2025-07-11 15:01:09,105 - werkzeug - INFO -  * Debugger PIN: 556-482-734
+2025-07-11 15:06:11,077 - werkzeug - INFO - 127.0.0.1 - - [11/Jul/2025 15:06:11] "GET /health HTTP/1.1" 200 -
+2025-07-11 15:06:14,716 - werkzeug - INFO - 127.0.0.1 - - [11/Jul/2025 15:06:14] "GET /models HTTP/1.1" 200 -
+2025-07-11 15:06:19,259 - __main__ - INFO - Finding best configuration for facebook/opt-125m on sst2 with criterion: accuracy
+2025-07-11 15:06:19,259 - __main__ - INFO - Testing configuration CHAI-Base: []
+2025-07-11 15:06:19,259 - __main__ - INFO - Starting benchmark for facebook/opt-125m on sst2
+2025-07-11 15:06:19,260 - __main__ - INFO - Loading model: facebook/opt-125m
+2025-07-11 15:06:20,586 - __main__ - INFO - Evaluating model on sst2 dataset
+2025-07-11 15:06:38,444 - __main__ - INFO - Evaluation results: Accuracy=55.16%, Latency=0.2459s, Throughput=64.23 samples/sec
+2025-07-11 15:06:39,383 - __main__ - INFO - Applying CHAI-Base (head clustering)
+2025-07-11 15:06:40,934 - __main__ - INFO - Evaluating model on sst2 dataset
+2025-07-11 15:06:54,760 - __main__ - INFO - Evaluation results: Accuracy=49.08%, Latency=0.2033s, Throughput=77.75 samples/sec
+2025-07-11 15:06:55,530 - __main__ - INFO - Evaluating model on sst2 dataset
+2025-07-11 15:07:08,659 - __main__ - INFO - Evaluation results: Accuracy=49.08%, Latency=0.1939s, Throughput=81.56 samples/sec
+2025-07-11 15:07:09,554 - __main__ - INFO - Testing configuration CHAI-001: ['chai-quant']
+2025-07-11 15:07:09,555 - __main__ - INFO - Starting benchmark for facebook/opt-125m on sst2
+2025-07-11 15:07:09,555 - __main__ - INFO - Loading model: facebook/opt-125m
+2025-07-11 15:07:10,662 - __main__ - INFO - Evaluating model on sst2 dataset
+2025-07-11 15:07:26,570 - __main__ - INFO - Evaluation results: Accuracy=45.53%, Latency=0.2376s, Throughput=66.54 samples/sec
+2025-07-11 15:07:27,553 - __main__ - INFO - Applying CHAI-Base (head clustering)
+2025-07-11 15:07:28,627 - __main__ - INFO - Evaluating model on sst2 dataset
+2025-07-11 15:07:42,385 - __main__ - INFO - Evaluation results: Accuracy=48.05%, Latency=0.1966s, Throughput=80.42 samples/sec
+2025-07-11 15:07:43,155 - __main__ - INFO - Applying CHAI-Quant (mixed-precision quantization)
+2025-07-11 15:07:43,225 - __main__ - INFO - Evaluating model on sst2 dataset
+2025-07-11 15:08:40,643 - __main__ - INFO - Evaluation results: Accuracy=48.51%, Latency=1.0017s, Throughput=15.81 samples/sec
+2025-07-11 15:08:41,081 - __main__ - INFO - Testing configuration CHAI-010: ['chai-target']
+2025-07-11 15:08:41,081 - __main__ - INFO - Starting benchmark for facebook/opt-125m on sst2
+2025-07-11 15:08:41,081 - __main__ - INFO - Loading model: facebook/opt-125m
+2025-07-11 15:08:42,386 - __main__ - INFO - Evaluating model on sst2 dataset
+2025-07-11 15:08:59,495 - __main__ - INFO - Evaluation results: Accuracy=47.71%, Latency=0.2673s, Throughput=58.99 samples/sec
+2025-07-11 15:09:00,552 - __main__ - INFO - Applying CHAI-Base (head clustering)
+2025-07-11 15:09:01,860 - __main__ - INFO - Evaluating model on sst2 dataset
+2025-07-11 15:09:15,281 - __main__ - INFO - Evaluation results: Accuracy=50.34%, Latency=0.1936s, Throughput=81.54 samples/sec
+2025-07-11 15:09:16,062 - __main__ - INFO - Applying CHAI-Target (targeted fine-tuning)

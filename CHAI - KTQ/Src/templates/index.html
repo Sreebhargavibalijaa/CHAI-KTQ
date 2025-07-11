@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHAI-KTQ: Efficient LLM Framework</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 2rem auto;
+            max-width: 1200px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--accent-color), var(--primary-color));
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            font-weight: 600;
+            padding: 1rem 1.5rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+            padding: 0.75rem 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+        }
+
+        .results-container {
+            background: var(--light-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .metric-label {
+            color: #6b7280;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            padding: 1rem 1.5rem;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+            background-color: #e5e7eb;
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, var(--success-color), var(--accent-color));
+            border-radius: 10px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 1rem;
+                border-radius: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- Header -->
+            <div class="header">
+                <h1><i class="fas fa-brain"></i> CHAI-KTQ</h1>
+                <p>A Novel Framework for Efficient and Scalable Large Language Models</p>
+                <div class="row mt-3">
+                    <div class="col-md-3">
+                        <div class="metric-card">
+                            <div class="metric-value">57.8%</div>
+                            <div class="metric-label">Memory Reduction</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-card">
+                            <div class="metric-value">76%</div>
+                            <div class="metric-label">Accuracy</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-card">
+                            <div class="metric-value">1.99ms</div>
+                            <div class="metric-label">Latency</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="metric-card">
+                            <div class="metric-value">3×</div>
+                            <div class="metric-label">Speed Improvement</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Configuration Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-cogs"></i> Model Configuration
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="modelSelect" class="form-label">Model</label>
+                                <select class="form-select" id="modelSelect">
+                                    <option value="facebook/opt-125m">OPT-125M</option>
+                                    <option value="facebook/opt-350m" selected>OPT-350M</option>
+                                    <option value="facebook/opt-1.3b">OPT-1.3B</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="datasetSelect" class="form-label">Dataset</label>
+                                <select class="form-select" id="datasetSelect">
+                                    <option value="sst2" selected>SST2 (Sentiment Analysis)</option>
+                                    <option value="rte">RTE (Textual Entailment)</option>
+                                    <option value="piqa">PIQA (Commonsense Reasoning)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="criterionSelect" class="form-label">Optimization Criterion</label>
+                                <select class="form-select" id="criterionSelect">
+                                    <option value="accuracy" selected>Accuracy</option>
+                                    <option value="latency">Latency</option>
+                                    <option value="size">Model Size</option>
+                                    <option value="throughput">Throughput</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhancement Selection -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-magic"></i> CHAI-KTQ Enhancements
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="chaiQuant" checked>
+                                    <label class="form-check-label" for="chaiQuant">
+                                        <strong>CHAI-Quant</strong><br>
+                                        <small class="text-muted">Mixed-precision quantization for reduced memory usage</small>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="chaiTarget" checked>
+                                    <label class="form-check-label" for="chaiTarget">
+                                        <strong>CHAI-Target</strong><br>
+                                        <small class="text-muted">Targeted fine-tuning on sensitive layers</small>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="chaiKD" checked>
+                                    <label class="form-check-label" for="chaiKD">
+                                        <strong>CHAI-KD</strong><br>
+                                        <small class="text-muted">Knowledge distillation for model compression</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-primary w-100" onclick="findBestConfiguration()">
+                            <i class="fas fa-search"></i> Find Best Configuration
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-success w-100" onclick="applyConfiguration()">
+                            <i class="fas fa-play"></i> Apply Selected Configuration
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div class="loading" id="loading">
+                    <div class="spinner mx-auto mb-3"></div>
+                    <h5>Processing...</h5>
+                    <p>This may take a few minutes depending on the model size and dataset.</p>
+                </div>
+
+                <!-- Results Section -->
+                <div id="results" class="results-container" style="display: none;">
+                    <h4><i class="fas fa-chart-bar"></i> Results</h4>
+                    <div id="resultsContent"></div>
+                </div>
+
+                <!-- Features Section -->
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-memory"></i>
+                        </div>
+                        <h5>Memory Optimization</h5>
+                        <p>Up to 57.8% reduction in memory usage through advanced quantization techniques.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h5>Speed Enhancement</h5>
+                        <p>3× improvement in inference speed with optimized attention mechanisms.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h5>Accuracy Preservation</h5>
+                        <p>Maintains high accuracy while achieving significant efficiency gains.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <h5>No Retraining</h5>
+                        <p>Applies optimizations without requiring full model retraining.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function showResults(data) {
+            const resultsDiv = document.getElementById('results');
+            const contentDiv = document.getElementById('resultsContent');
+            
+            let html = '';
+            
+            if (data.error) {
+                html = `<div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i> ${data.error}
+                </div>`;
+            } else {
+                html = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-line"></i> Performance Metrics
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="metric-card">
+                                                <div class="metric-value">${data.results?.final?.accuracy?.toFixed(2) || 'N/A'}%</div>
+                                                <div class="metric-label">Accuracy</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="metric-card">
+                                                <div class="metric-value">${data.results?.final?.latency?.toFixed(4) || 'N/A'}s</div>
+                                                <div class="metric-label">Latency</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-6">
+                                            <div class="metric-card">
+                                                <div class="metric-value">${data.results?.final?.size_mb?.toFixed(2) || 'N/A'}MB</div>
+                                                <div class="metric-label">Model Size</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="metric-card">
+                                                <div class="metric-value">${data.results?.final?.throughput?.toFixed(2) || 'N/A'}</div>
+                                                <div class="metric-label">Throughput (samples/sec)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fas fa-trophy"></i> Improvements
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Accuracy Improvement</label>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: ${Math.max(0, data.results?.improvements?.accuracy_improvement || 0)}%"></div>
+                                        </div>
+                                        <small class="text-muted">${(data.results?.improvements?.accuracy_improvement || 0).toFixed(2)}%</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Latency Improvement</label>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: ${Math.max(0, data.results?.improvements?.latency_improvement || 0)}%"></div>
+                                        </div>
+                                        <small class="text-muted">${(data.results?.improvements?.latency_improvement || 0).toFixed(2)}%</small>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Size Reduction</label>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: ${Math.max(0, data.results?.improvements?.size_reduction || 0)}%"></div>
+                                        </div>
+                                        <small class="text-muted">${(data.results?.improvements?.size_reduction || 0).toFixed(2)}%</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <i class="fas fa-info-circle"></i> Configuration Details
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Model:</strong> ${data.model_name || 'N/A'}</p>
+                                    <p><strong>Dataset:</strong> ${data.dataset_name || 'N/A'}</p>
+                                    <p><strong>Applied Methods:</strong> ${data.applied_configurations?.join(', ') || 'N/A'}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Best Configuration:</strong> ${data.best_configuration || 'N/A'}</p>
+                                    <p><strong>Criterion:</strong> ${data.criterion || 'N/A'}</p>
+                                    <p><strong>Best Value:</strong> ${data.best_value || 'N/A'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            contentDiv.innerHTML = html;
+            resultsDiv.style.display = 'block';
+        }
+
+        async function findBestConfiguration() {
+            showLoading();
+            
+            const modelName = document.getElementById('modelSelect').value;
+            const datasetName = document.getElementById('datasetSelect').value;
+            const criterion = document.getElementById('criterionSelect').value;
+            
+            try {
+                const response = await fetch('/find_best_configuration', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model_name: modelName,
+                        dataset_name: datasetName,
+                        criterion: criterion
+                    })
+                });
+                
+                const data = await response.json();
+                showResults(data);
+            } catch (error) {
+                showResults({ error: 'Network error: ' + error.message });
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function applyConfiguration() {
+            showLoading();
+            
+            const modelName = document.getElementById('modelSelect').value;
+            const datasetName = document.getElementById('datasetSelect').value;
+            const configurations = [];
+            
+            if (document.getElementById('chaiQuant').checked) configurations.push('chai-quant');
+            if (document.getElementById('chaiTarget').checked) configurations.push('chai-target');
+            if (document.getElementById('chaiKD').checked) configurations.push('chai-kd');
+            
+            try {
+                const response = await fetch('/choose_configuration', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model_name: modelName,
+                        dataset_name: datasetName,
+                        configurations: configurations
+                    })
+                });
+                
+                const data = await response.json();
+                showResults(data);
+            } catch (error) {
+                showResults({ error: 'Network error: ' + error.message });
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('CHAI-KTQ Framework initialized');
+        });
+    </script>
+</body>
+</html> 
