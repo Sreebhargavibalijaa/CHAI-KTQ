@@ -1,4 +1,4 @@
-# CHAI-KTQ: A Scalable and Efficient Framework for Large Language Models in Collaboration with FAIR – Meta AI Research
+# CHAI-KTQ: A Scalable and Efficient Framework for Large Language Models – Meta Research
 
 ## 📋 Overview
 
